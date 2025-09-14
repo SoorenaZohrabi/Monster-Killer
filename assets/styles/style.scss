@@ -1,0 +1,63 @@
+// Variables
+$primary-color: #ff0062;
+$secondary-color: #a927f5;
+$bg-dark: #2c2c2c;
+$white: #fff;
+
+// Base styles
+html {
+  font-family: sans-serif;
+}
+
+body {
+  background-color: $bg-dark;
+  color: $white;
+}
+
+// Progress bars
+progress {
+  appearance: none;
+  width: 100%;
+  height: 2rem;
+  border: 1px solid $secondary-color;
+
+  &::-webkit-progress-bar {
+    background-color: #eee;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25);
+  }
+
+  &::-webkit-progress-value {
+    background-color: $secondary-color;
+    transition: all 0.2s ease-out;
+  }
+
+  &::-moz-progress-bar {
+    background-color: $secondary-color;
+    transition: all 0.2s ease-out;
+  }
+}
+
+// Bonus life badge
+#bonus-life {
+  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 10px;
+}
+
+// Card styling
+#health-levels {
+  background-color: $white;
+  color: $bg-dark;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+// Controls section
+#controls {
+  button {
+    font: inherit;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+}

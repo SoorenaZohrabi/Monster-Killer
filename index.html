@@ -4,26 +4,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Monster Killer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/styles/style.css" />
   <script src="./assets/scripts/vendor.js" defer></script>
   <script src="./assets/scripts/app.js" defer></script>
 </head>
 
-<body>
-  <section id="health-levels">
-    <h2>MONSTER HEALTH</h2>
-    <progress id="monster-health" max="100" value="100">100%</progress>
-    <h2>PLAYER HEALTH<span id="bonus-life">1</span></h2>
-    <progress id="player-health" max="100" value="100">100%</progress>
-  </section>
-  <section id="controls">
-    <button id="attack-btn">ATTACK</button>
-    <button id="strong-attack-btn">STRONG ATTACK</button>
-    <button id="heal-btn">HEAL</button>
-    <button id="log-btn">SHOW LOG</button>
-  </section>
+<body class="bg-dark text-white">
+
+  <div class="container py-5">
+    <section id="health-levels" class="card p-4 mb-4 text-center">
+      <h2 class="mb-3">MONSTER HEALTH</h2>
+      <progress id="monster-health" max="100" value="100" class="w-100 mb-3">100%</progress>
+      <h2>PLAYER HEALTH <span id="bonus-life" class="badge bg-danger ms-2">1</span></h2>
+      <progress id="player-health" max="100" value="100" class="w-100">100%</progress>
+    </section>
+
+    <section id="controls" class="d-grid gap-3">
+      <button id="attack-btn" class="btn btn-primary">ATTACK</button>
+      <button id="strong-attack-btn" class="btn btn-warning">STRONG ATTACK</button>
+      <button id="heal-btn" class="btn btn-success">HEAL</button>
+      <button id="log-btn" class="btn btn-secondary">SHOW LOG</button>
+    </section>
+  </div>
+
 </body>
 
 </html>
