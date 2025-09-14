@@ -1,14 +1,24 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Game state
 let monsterHealth = 100;
 let playerHealth = 100;
 let bonusLife = true;
 let isPlayerTurn = true;
+let boostedAttack = false;
 
+// Inventory
+const inventory = {
+  healthPotion: 2,
+  powerBoost: 1
+};
+
+// Displayed health for animation
 let displayedMonsterHealth = 100;
 let displayedPlayerHealth = 100;
 
+// Draw health bars
 function drawHealthBars() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -30,6 +40,7 @@ function drawHealthBars() {
   }
 }
 
+// Animate health bar transitions
 function animateHealthBars() {
   const speed = 1;
 
@@ -45,6 +56,7 @@ function animateHealthBars() {
   requestAnimationFrame(animateHealthBars);
 }
 
+// Game over check
 function checkGameOver() {
   if (monsterHealth <= 0) {
     logEvent('🎉 You defeated the monster!');
@@ -64,25 +76,42 @@ function checkGameOver() {
   }
 }
 
+// Reset game state
 function resetGame() {
   monsterHealth = 100;
   playerHealth = 100;
   bonusLife = true;
   isPlayerTurn = true;
+  boostedAttack = false;
+  inventory.healthPotion = 2;
+  inventory.powerBoost = 1;
 }
 
+// Damage calculation with critical/miss/boost
 function getDamage(base) {
   const roll = Math.random();
+  let damage;
+
   if (roll < 0.1) {
     logEvent('❌ Your attack missed!');
-    return 0;
+    damage = 0;
   } else if (roll > 0.9) {
     logEvent('💥 Critical hit!');
-    return base * 2;
+    damage = base * 2;
+  } else {
+    damage = base;
   }
-  return base;
+
+  if (boostedAttack) {
+    damage *= 2;
+    logEvent('⚡ Boosted attack!');
+    boostedAttack = false;
+  }
+
+  return damage;
 }
 
+// Player attack
 function attackMonster(baseDamage) {
   if (!isPlayerTurn) return;
 
@@ -94,6 +123,7 @@ function attackMonster(baseDamage) {
   checkGameOver();
 }
 
+// Player heal
 function healPlayer(amount) {
   if (!isPlayerTurn) return;
 
@@ -103,6 +133,7 @@ function healPlayer(amount) {
   setTimeout(monsterAction, 1000);
 }
 
+// Monster turn
 function monsterAction() {
   const roll = Math.random();
   let damage;
@@ -123,6 +154,33 @@ function monsterAction() {
   checkGameOver();
 }
 
+// Use health potion
+function useHealthPotion() {
+  if (!isPlayerTurn) return;
+  if (inventory.healthPotion > 0) {
+    inventory.healthPotion--;
+    playerHealth = Math.min(100, playerHealth + 30);
+    logEvent('🧪 Used Health Potion (+30 HP)');
+    isPlayerTurn = false;
+    setTimeout(monsterAction, 1000);
+  } else {
+    logEvent('❌ No Health Potions left!');
+  }
+}
+
+// Use power boost
+function usePowerBoost() {
+  if (!isPlayerTurn) return;
+  if (inventory.powerBoost > 0) {
+    inventory.powerBoost--;
+    boostedAttack = true;
+    logEvent('⚡ Power Boost activated! Next attack doubled.');
+  } else {
+    logEvent('❌ No Power Boosts left!');
+  }
+}
+
+// Log output
 function logEvent(message) {
   const logOutput = document.getElementById('log-output');
   const entry = document.createElement('div');
@@ -131,13 +189,17 @@ function logEvent(message) {
   logOutput.scrollTop = logOutput.scrollHeight;
 }
 
+// Button listeners
 document.getElementById('attack-btn').addEventListener('click', () => attackMonster(10));
 document.getElementById('strong-attack-btn').addEventListener('click', () => attackMonster(17));
 document.getElementById('heal-btn').addEventListener('click', () => healPlayer(20));
+document.getElementById('potion-btn').addEventListener('click', useHealthPotion);
+document.getElementById('boost-btn').addEventListener('click', usePowerBoost);
 document.getElementById('log-btn').addEventListener('click', () => {
   logEvent(`Monster Health: ${monsterHealth}`);
   logEvent(`Player Health: ${playerHealth}`);
   logEvent(`Bonus Life: ${bonusLife ? 'Active' : 'Used'}`);
+  logEvent(`Potions: ${inventory.healthPotion}, Boosts: ${inventory.powerBoost}`);
 });
 
 animateHealthBars();
