@@ -1,63 +1,63 @@
-// Variables
-$primary-color: #ff0062;
-$secondary-color: #a927f5;
+$primary: #ff0062;
+$secondary: #a927f5;
 $bg-dark: #2c2c2c;
-$white: #fff;
-
-// Base styles
-html {
-  font-family: sans-serif;
-}
+$health-monster: #4caf50;
+$health-player: #f44336;
 
 body {
   background-color: $bg-dark;
-  color: $white;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-// Progress bars
-progress {
-  appearance: none;
-  width: 100%;
-  height: 2rem;
-  border: 1px solid $secondary-color;
-
-  &::-webkit-progress-bar {
-    background-color: #eee;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25);
-  }
-
-  &::-webkit-progress-value {
-    background-color: $secondary-color;
-    transition: all 0.2s ease-out;
-  }
-
-  &::-moz-progress-bar {
-    background-color: $secondary-color;
-    transition: all 0.2s ease-out;
-  }
+canvas {
+  max-width: 100%;
+  height: auto;
+  background-color: lighten($bg-dark, 10%);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(white, 0.1);
 }
 
-// Bonus life badge
-#bonus-life {
+button {
   font-weight: bold;
-  padding: 0.25rem 0.75rem;
-  border-radius: 10px;
-}
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
-// Card styling
-#health-levels {
-  background-color: $white;
-  color: $bg-dark;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-// Controls section
-#controls {
-  button {
-    font: inherit;
-    padding: 1rem 2rem;
-    border-radius: 6px;
-    cursor: pointer;
+  &:hover {
+    background-color: $secondary;
+    color: #fff;
+    box-shadow: 0 0 10px rgba($secondary, 0.5);
   }
+}
+
+.bonus-life {
+  color: $primary;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+#log-output {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: lighten($bg-dark, 5%);
+  border-radius: 8px;
+  border: 1px solid rgba(white, 0.1);
 }
