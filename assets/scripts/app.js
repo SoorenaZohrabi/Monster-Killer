@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 let monsterHealth = 100;
 let playerHealth = 100;
 let bonusLife = true;
+let isPlayerTurn = true;
 
 let displayedMonsterHealth = 100;
 let displayedPlayerHealth = 100;
@@ -67,18 +68,59 @@ function resetGame() {
   monsterHealth = 100;
   playerHealth = 100;
   bonusLife = true;
+  isPlayerTurn = true;
 }
 
-function attackMonster(damage) {
+function getDamage(base) {
+  const roll = Math.random();
+  if (roll < 0.1) {
+    logEvent('❌ Your attack missed!');
+    return 0;
+  } else if (roll > 0.9) {
+    logEvent('💥 Critical hit!');
+    return base * 2;
+  }
+  return base;
+}
+
+function attackMonster(baseDamage) {
+  if (!isPlayerTurn) return;
+
+  const damage = getDamage(baseDamage);
   monsterHealth = Math.max(0, monsterHealth - damage);
-  playerHealth = Math.max(0, playerHealth - 14);
-  logEvent(`You attacked for ${damage} damage. Monster retaliated.`);
+  logEvent(`You attacked for ${damage} damage.`);
+  isPlayerTurn = false;
+  setTimeout(monsterAction, 1000);
   checkGameOver();
 }
 
 function healPlayer(amount) {
+  if (!isPlayerTurn) return;
+
   playerHealth = Math.min(100, playerHealth + amount);
   logEvent(`You healed for ${amount} HP.`);
+  isPlayerTurn = false;
+  setTimeout(monsterAction, 1000);
+}
+
+function monsterAction() {
+  const roll = Math.random();
+  let damage;
+
+  if (roll < 0.1) {
+    logEvent('😅 Monster missed its attack!');
+    damage = 0;
+  } else if (roll > 0.9) {
+    damage = Math.floor(Math.random() * 15) + 10;
+    logEvent('🔥 Monster lands a critical hit!');
+  } else {
+    damage = Math.floor(Math.random() * 10) + 5;
+    logEvent(`Monster attacks for ${damage} damage.`);
+  }
+
+  playerHealth = Math.max(0, playerHealth - damage);
+  isPlayerTurn = true;
+  checkGameOver();
 }
 
 function logEvent(message) {
@@ -86,6 +128,7 @@ function logEvent(message) {
   const entry = document.createElement('div');
   entry.textContent = message;
   logOutput.appendChild(entry);
+  logOutput.scrollTop = logOutput.scrollHeight;
 }
 
 document.getElementById('attack-btn').addEventListener('click', () => attackMonster(10));
